@@ -7,10 +7,10 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PlaceSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
-    category_id = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(), source='category', write_only=True
-    )
+    category_name = serializers.CharField(source='category.name', read_only=True)
+    category_slug = serializers.CharField(source='category.slug', read_only=True)
+    category_icon = serializers.CharField(source='category.icon', read_only=True)
+    distance_km = serializers.FloatField(read_only=True, required=False)
 
     class Meta:
         model = Place
@@ -20,3 +20,4 @@ class PlaceSuggestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlaceSuggestion
         fields = '__all__'
+        read_only_fields = ('user', 'status', 'reviewed_at')
