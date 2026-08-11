@@ -466,11 +466,6 @@ Future versions can provide personalized recommendations, real-time information,
 https://github.com/PavanKumar9474
 
 ---
-
-# 📄 License
-
-This project is licensed under the **MIT License**.
-
 ---
 
 # ⭐ Support
