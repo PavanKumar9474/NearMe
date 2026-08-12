@@ -21,7 +21,6 @@ A location-based application that helps users discover useful places and service
 
 Instead of manually searching for nearby services, users can use NearMe to discover relevant locations based on their requirements and geographical position.
 
-The application focuses on making location discovery simple, fast, and convenient.
 
 ---
 
