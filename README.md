@@ -454,6 +454,7 @@ Future versions can provide personalized recommendations, real-time information,
 - FastAPI
 - React.js
 - JavaScript
+- Sql
 - PostgreSQL
 - MongoDB
 - Docker
