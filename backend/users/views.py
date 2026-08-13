@@ -21,9 +21,21 @@ class UserViewSet(viewsets.ModelViewSet):
         return User.objects.filter(id=user.id)
 
 class SearchHistoryViewSet(viewsets.ModelViewSet):
-    queryset = SearchHistory.objects.all()
     serializer_class = SearchHistorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return SearchHistory.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class FavoriteViewSet(viewsets.ModelViewSet):
-    queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Favorite.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

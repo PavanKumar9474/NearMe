@@ -78,7 +78,7 @@ export default function PlaceDetailsPage() {
               </button>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)' }}>
-              {place.category && <span style={{ background: 'var(--bg-secondary)', padding: '0.25rem 0.75rem', borderRadius: '999px', fontSize: '0.875rem' }}>{place.category.name}</span>}
+              {place.category_name && <span style={{ background: 'var(--bg-secondary)', padding: '0.25rem 0.75rem', borderRadius: '999px', fontSize: '0.875rem' }}>{place.category_name}</span>}
               {place.rating && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#fbbf24' }}>
                   <Star size={18} fill="currentColor" />
