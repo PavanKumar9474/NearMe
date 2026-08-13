@@ -14,8 +14,8 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'places', PlaceViewSet)
 router.register(r'suggestions', PlaceSuggestionViewSet)
 router.register(r'users', UserViewSet)
-router.register(r'search-history', SearchHistoryViewSet)
-router.register(r'favorites', FavoriteViewSet)
+router.register(r'search-history', SearchHistoryViewSet, basename='searchhistory')
+router.register(r'favorites', FavoriteViewSet, basename='favorite')
 router.register(r'reports', PlaceReportViewSet)
 
 urlpatterns = [

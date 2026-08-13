@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import LocationPickerMap from '../components/LocationPickerMap';
 export default function AddPlacePage() {
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
@@ -50,13 +50,11 @@ export default function AddPlacePage() {
           <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Address</label>
           <input type="text" name="address" required value={formData.address} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} placeholder="123 Main St" />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Latitude</label>
-          <input type="number" step="any" name="latitude" required value={formData.latitude} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} placeholder="40.7128" />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Longitude</label>
-          <input type="number" step="any" name="longitude" required value={formData.longitude} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} placeholder="-74.0060" />
+        <div style={{ gridColumn: '1 / -1' }}>
+          <LocationPickerMap 
+            position={formData.latitude && formData.longitude ? [parseFloat(formData.latitude), parseFloat(formData.longitude)] : null}
+            setPosition={(pos) => setFormData({ ...formData, latitude: pos[0].toFixed(6), longitude: pos[1].toFixed(6) })}
+          />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Phone</label>

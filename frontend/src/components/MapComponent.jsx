@@ -12,21 +12,35 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-function MapBounds({ places }) {
+function MapBounds({ places, userLocation }) {
   const map = useMap();
 
   useEffect(() => {
     if (places.length > 0) {
       const bounds = L.latLngBounds(places.map(p => [p.latitude, p.longitude]));
+      if (userLocation) {
+        bounds.extend(userLocation);
+      }
       map.fitBounds(bounds, { padding: [50, 50] });
+    } else if (userLocation) {
+      map.flyTo(userLocation, 14);
     }
-  }, [places, map]);
+  }, [places, userLocation, map]);
 
   return null;
 }
 
-export default function MapComponent({ places }) {
-  const defaultCenter = [40.7128, -74.0060]; // NYC as default if no places
+const userIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+export default function MapComponent({ places, userLocation }) {
+  const defaultCenter = userLocation || [40.7128, -74.0060]; // User location or NYC
 
   return (
     <div style={{ height: '500px', width: '100%', borderRadius: '1rem', overflow: 'hidden' }}>
@@ -39,6 +53,11 @@ export default function MapComponent({ places }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
+        {userLocation && (
+          <Marker position={userLocation} icon={userIcon}>
+            <Popup>You are here</Popup>
+          </Marker>
+        )}
         {places.map(place => (
           <Marker key={place.id} position={[place.latitude, place.longitude]}>
             <Popup>
@@ -52,7 +71,7 @@ export default function MapComponent({ places }) {
             </Popup>
           </Marker>
         ))}
-        <MapBounds places={places} />
+        <MapBounds places={places} userLocation={userLocation} />
       </MapContainer>
     </div>
   );

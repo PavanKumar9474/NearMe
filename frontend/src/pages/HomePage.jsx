@@ -7,6 +7,7 @@ import SearchBar from '../components/SearchBar';
 export default function HomePage() {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userLocation, setUserLocation] = useState(null);
 
   const fetchPlaces = useCallback((searchParams = {}) => {
     setLoading(true);
@@ -17,7 +18,7 @@ export default function HomePage() {
       params.append('category', searchParams.category);
     }
     if (searchParams.query) {
-      params.append('search', searchParams.query); // Requires backend search filter setup
+      params.append('search', searchParams.query);
     }
 
     if (params.toString()) {
@@ -26,13 +27,7 @@ export default function HomePage() {
 
     axios.get(url)
       .then(res => {
-        // Simple client-side filtering if backend search is not configured
-        let data = res.data;
-        if (searchParams.query) {
-          const q = searchParams.query.toLowerCase();
-          data = data.filter(p => p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
-        }
-        setPlaces(data);
+        setPlaces(res.data);
         setLoading(false);
       })
       .catch(err => {
@@ -43,6 +38,15 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchPlaces();
+    
+    // Request user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
+        (err) => console.log("Location access denied or error:", err),
+        { timeout: 10000 }
+      );
+    }
   }, [fetchPlaces]);
 
   return (
@@ -57,7 +61,7 @@ export default function HomePage() {
       </div>
       
       <div style={{ marginBottom: '3rem', animationDelay: '0.2s' }} className="animate-fade-in">
-        <MapComponent places={places} />
+        <MapComponent places={places} userLocation={userLocation} />
       </div>
       
       <h2 style={{ marginBottom: '1.5rem' }}>Popular Places</h2>
