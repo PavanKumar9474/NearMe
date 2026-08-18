@@ -39,7 +39,7 @@ export default function LoginPage() {
         </div>
         <button type="submit" className="btn-primary" style={{ marginTop: '1rem', padding: '1.25rem', fontSize: '1.1rem' }}>Login</button>
         <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '1.5rem', fontSize: '0.9rem' }}>
-          Don't have an account? <Link to="/register" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 600 }}>Sign up</Link>
+          Don't have an account? <Link to="/register" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 600 }}>Sign up Here</Link>
         </p>
       </form>
     </div>
