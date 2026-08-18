@@ -54,3 +54,28 @@ class PlaceSuggestion(models.Model):
 
     def __str__(self):
         return self.name
+
+class Review(models.Model):
+    place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.place.name} ({self.rating})"
+
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.db.models import Avg
+
+@receiver(post_save, sender=Review)
+@receiver(post_delete, sender=Review)
+def update_place_rating(sender, instance, **kwargs):
+    place = instance.place
+    avg_rating = place.reviews.aggregate(Avg('rating'))['rating__avg']
+    if avg_rating is not None:
+        place.rating = round(avg_rating, 1)
+    else:
+        place.rating = None
+    place.save()

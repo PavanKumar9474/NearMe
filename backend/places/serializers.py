@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Place, PlaceSuggestion
+from .models import Category, Place, PlaceSuggestion, Review
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,3 +21,11 @@ class PlaceSuggestionSerializer(serializers.ModelSerializer):
         model = PlaceSuggestion
         fields = '__all__'
         read_only_fields = ('user', 'status', 'reviewed_at')
+
+class ReviewSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+        read_only_fields = ('user',)

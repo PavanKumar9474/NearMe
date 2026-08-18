@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from places.views import CategoryViewSet, PlaceViewSet, PlaceSuggestionViewSet
+from places.views import CategoryViewSet, PlaceViewSet, PlaceSuggestionViewSet, ReviewViewSet
 from users.views import UserViewSet, SearchHistoryViewSet, FavoriteViewSet, RegisterView
 from reports.views import PlaceReportViewSet
 
@@ -17,6 +17,7 @@ router.register(r'users', UserViewSet)
 router.register(r'search-history', SearchHistoryViewSet, basename='searchhistory')
 router.register(r'favorites', FavoriteViewSet, basename='favorite')
 router.register(r'reports', PlaceReportViewSet)
+router.register(r'reviews', ReviewViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

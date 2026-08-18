@@ -14,11 +14,15 @@ export default function HomePage() {
     let url = 'http://127.0.0.1:8000/api/places/';
     const params = new URLSearchParams();
     
-    if (searchParams.category) {
-      params.append('category', searchParams.category);
-    }
-    if (searchParams.query) {
-      params.append('search', searchParams.query);
+    if (searchParams.category) params.append('category', searchParams.category);
+    if (searchParams.query) params.append('search', searchParams.query);
+    if (searchParams.minRating) params.append('min_rating', searchParams.minRating);
+    if (searchParams.sortBy) params.append('sort_by', searchParams.sortBy);
+    if (searchParams.radius) params.append('radius', searchParams.radius);
+    
+    if (searchParams.userLocation) {
+      params.append('user_lat', searchParams.userLocation[0]);
+      params.append('user_lon', searchParams.userLocation[1]);
     }
 
     if (params.toString()) {
@@ -57,7 +61,10 @@ export default function HomePage() {
       </div>
 
       <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-        <SearchBar onSearch={fetchPlaces} />
+        <SearchBar 
+          onSearch={(params) => fetchPlaces({ ...params, userLocation })} 
+          showDistanceSort={!!userLocation} 
+        />
       </div>
       
       <div style={{ marginBottom: '3rem', animationDelay: '0.2s' }} className="animate-fade-in">

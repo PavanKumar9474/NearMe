@@ -7,10 +7,22 @@ import ReportModal from '../components/ReportModal';
 export default function PlaceDetailsPage() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showReport, setShowReport] = useState(false);
+  
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [submittingReview, setSubmittingReview] = useState(false);
+
   const token = localStorage.getItem('access_token');
+
+  const fetchReviews = () => {
+    axios.get(`http://127.0.0.1:8000/api/reviews/?place=${id}`)
+      .then(res => setReviews(res.data))
+      .catch(err => console.error("Error fetching reviews:", err));
+  };
 
   useEffect(() => {
     const fetchPlace = axios.get(`http://127.0.0.1:8000/api/places/${id}/`);
@@ -23,6 +35,7 @@ export default function PlaceDetailsPage() {
         if (favs.some(f => f.place === parseInt(id))) {
           setIsFavorite(true);
         }
+        fetchReviews();
         setLoading(false);
       })
       .catch(err => {
@@ -49,6 +62,25 @@ export default function PlaceDetailsPage() {
         .then(() => setIsFavorite(true))
         .catch(err => console.error("Error favoriting:", err));
     }
+  };
+
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    if (!token) return alert('Please login to submit a review.');
+    setSubmittingReview(true);
+    axios.post('http://127.0.0.1:8000/api/reviews/', {
+      place: id,
+      rating: reviewRating,
+      comment: reviewText
+    }, { headers: { Authorization: `Bearer ${token}` } })
+    .then(res => {
+      setReviews([res.data, ...reviews]);
+      setReviewText('');
+      setReviewRating(5);
+      axios.get(`http://127.0.0.1:8000/api/places/${id}/`).then(p => setPlace(p.data));
+    })
+    .catch(err => console.error("Error submitting review:", err))
+    .finally(() => setSubmittingReview(false));
   };
 
   if (loading) return <div className="container">Loading...</div>;
@@ -132,7 +164,64 @@ export default function PlaceDetailsPage() {
             <AlertTriangle size={16} /> Report Issue
           </button>
         </div>
+
+        <div style={{ marginTop: '2rem', borderTop: '1px solid var(--border-glass)', paddingTop: '2rem' }}>
+          <h2 style={{ marginBottom: '1.5rem' }}>Reviews</h2>
+          
+          {token ? (
+            <form onSubmit={handleReviewSubmit} style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', background: 'var(--bg-secondary)', padding: '1.5rem', borderRadius: '0.75rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Write a Review</h3>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Rating</label>
+                <select value={reviewRating} onChange={(e) => setReviewRating(Number(e.target.value))} style={{ padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid var(--border-glass)', background: 'var(--bg-primary)', color: 'white' }}>
+                  <option value="5">5 - Excellent</option>
+                  <option value="4">4 - Good</option>
+                  <option value="3">3 - Average</option>
+                  <option value="2">2 - Poor</option>
+                  <option value="1">1 - Terrible</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Comment</label>
+                <textarea 
+                  required 
+                  value={reviewText} 
+                  onChange={(e) => setReviewText(e.target.value)} 
+                  rows="3" 
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--border-glass)', background: 'var(--bg-primary)', color: 'white', resize: 'vertical' }}
+                  placeholder="Share your experience..."
+                />
+              </div>
+              <button type="submit" className="btn-primary" disabled={submittingReview} style={{ alignSelf: 'flex-start', padding: '0.5rem 1.5rem' }}>
+                {submittingReview ? 'Submitting...' : 'Submit Review'}
+              </button>
+            </form>
+          ) : (
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Please <Link to="/login" style={{ color: 'var(--accent-primary)' }}>login</Link> to leave a review.</p>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {reviews.length === 0 ? (
+              <p style={{ color: 'var(--text-secondary)' }}>No reviews yet. Be the first to review this place!</p>
+            ) : (
+              reviews.map(review => (
+                <div key={review.id} style={{ padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '0.5rem', border: '1px solid var(--border-glass)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ fontWeight: 600 }}>{review.username || 'User'}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#fbbf24' }}>
+                      <Star size={14} fill="currentColor" />
+                      <span>{review.rating}</span>
+                    </div>
+                  </div>
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.5 }}>{review.comment}</p>
+                  <small style={{ color: 'gray', display: 'block', marginTop: '0.5rem' }}>{new Date(review.created_at).toLocaleDateString()}</small>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
+
       
       {showReport && <ReportModal placeId={place.id} onClose={() => setShowReport(false)} />}
     </div>
