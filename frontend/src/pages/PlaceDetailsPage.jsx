@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import { MapPin, Globe, Phone, Clock, Star, ArrowLeft, Heart, AlertTriangle } from 'lucide-react';
+import { MapPin, Globe, Phone, Clock, Star, ArrowLeft, Heart, AlertTriangle, Navigation } from 'lucide-react';
 import ReportModal from '../components/ReportModal';
 
 export default function PlaceDetailsPage() {
@@ -131,7 +131,12 @@ export default function PlaceDetailsPage() {
             <h3 style={{ marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Contact Info</h3>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
               <MapPin size={20} style={{ color: 'var(--accent-primary)', marginTop: '0.1rem' }} />
-              <span>{place.address}</span>
+              <div>
+                <span style={{ display: 'block', marginBottom: '0.5rem' }}>{place.address}</span>
+                <a href={`https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.8rem', fontSize: '0.85rem', textDecoration: 'none' }}>
+                  <Navigation size={16} /> Get Directions
+                </a>
+              </div>
             </div>
             {place.phone && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

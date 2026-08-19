@@ -354,17 +354,17 @@ Users should be informed about location permissions and how their location data 
 
 # 🚀 Future Enhancements
 
-- [ ] User Authentication
-- [ ] Favorites
-- [ ] Search History
+- [x] User Authentication
+- [x] Favorites
+- [x] Search History
 - [ ] Advanced Filters
-- [ ] Distance-Based Sorting
-- [ ] Ratings & Reviews
-- [ ] Place Details
+- [x] Distance-Based Sorting
+- [x] Ratings & Reviews
+- [x] Place Details
 - [ ] Opening Hours
-- [ ] Phone Number Integration
-- [ ] Directions
-- [ ] Dark Mode
+- [x] Phone Number Integration
+- [x] Directions
+- [x] Dark Mode
 - [ ] Push Notifications
 - [ ] Personalized Recommendations
 - [ ] AI-Based Recommendations

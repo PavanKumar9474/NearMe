@@ -10,16 +10,36 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
   const [sortBy, setSortBy] = useState('');
   const [radius, setRadius] = useState('');
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+  
+  const token = localStorage.getItem('access_token');
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/categories/')
       .then(res => setCategories(res.data))
       .catch(err => console.error("Error fetching categories:", err));
-  }, []);
+
+    if (token) {
+      axios.get('http://127.0.0.1:8000/api/search-history/', { headers: { Authorization: `Bearer ${token}` } })
+        .then(res => setHistory(res.data.slice(0, 5)))
+        .catch(err => console.error("Error fetching history:", err));
+    }
+  }, [token]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (token && query.trim()) {
+      axios.post('http://127.0.0.1:8000/api/search-history/', { query }, { headers: { Authorization: `Bearer ${token}` } })
+        .catch(err => console.error("Error saving search history:", err));
+    }
+    setShowHistory(false);
     onSearch({ query, category, minRating, sortBy, radius });
+  };
+
+  const handleHistoryClick = (histQuery) => {
+    setQuery(histQuery);
+    setShowHistory(false);
   };
 
   const inputStyle = {
@@ -34,15 +54,33 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
   return (
     <form onSubmit={handleSubmit} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem', marginBottom: '2rem' }}>
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
-        <div style={{ flex: '1', minWidth: '200px', display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.2)', borderRadius: '0.5rem', padding: '0 1rem', border: '1px solid var(--border-glass)' }}>
+        <div style={{ flex: '1', minWidth: '200px', display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.2)', borderRadius: '0.5rem', padding: '0 1rem', border: '1px solid var(--border-glass)', position: 'relative' }}>
           <Search size={20} color="var(--text-secondary)" />
           <input 
             type="text" 
             placeholder="Search places..." 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setShowHistory(true)}
+            onBlur={() => setTimeout(() => setShowHistory(false), 200)}
             style={{ width: '100%', padding: '0.75rem', background: 'transparent', border: 'none', color: 'white', outline: 'none' }}
           />
+          {showHistory && history.length > 0 && (
+            <div style={{ position: 'absolute', top: '110%', left: 0, right: 0, background: 'var(--bg-secondary)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', zIndex: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+              {history.map((h, i) => (
+                <div 
+                  key={i} 
+                  onClick={() => handleHistoryClick(h.query)}
+                  style={{ padding: '0.75rem 1rem', cursor: 'pointer', borderBottom: i < history.length - 1 ? '1px solid var(--border-glass)' : 'none', color: 'var(--text-secondary)' }}
+                  onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'white'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                >
+                  <Search size={14} style={{ marginRight: '0.5rem', display: 'inline-block', verticalAlign: 'middle' }} />
+                  <span style={{ verticalAlign: 'middle' }}>{h.query}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         
         <button 
