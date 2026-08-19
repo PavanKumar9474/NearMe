@@ -6,7 +6,7 @@ export default function AddPlacePage() {
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: '', category: '', address: '', latitude: '', longitude: '',
-    phone: '', website: '', description: ''
+    phone: '', website: '', description: '', opening_hours: ''
   });
   const navigate = useNavigate();
 
@@ -63,6 +63,10 @@ export default function AddPlacePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Website</label>
           <input type="url" name="website" value={formData.website} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} placeholder="https://example.com" />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', gridColumn: '1 / -1' }}>
+          <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Opening Hours</label>
+          <input type="text" name="opening_hours" value={formData.opening_hours} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} placeholder="e.g. Mon-Fri 9AM-5PM" />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', gridColumn: '1 / -1' }}>
           <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Description</label>

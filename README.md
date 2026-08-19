@@ -357,17 +357,17 @@ Users should be informed about location permissions and how their location data 
 - [x] User Authentication
 - [x] Favorites
 - [x] Search History
-- [ ] Advanced Filters
+- [x] Advanced Filters
 - [x] Distance-Based Sorting
 - [x] Ratings & Reviews
 - [x] Place Details
-- [ ] Opening Hours
+- [x] Opening Hours
 - [x] Phone Number Integration
 - [x] Directions
 - [x] Dark Mode
-- [ ] Push Notifications
-- [ ] Personalized Recommendations
-- [ ] AI-Based Recommendations
+- [x] Push Notifications
+- [x] Personalized Recommendations
+- [x] AI-Based Recommendations
 
 ---
 

@@ -7,6 +7,7 @@ export default function ProfilePage() {
   const [favorites, setFavorites] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pushEnabled, setPushEnabled] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,10 +47,21 @@ export default function ProfilePage() {
       <h1 style={{ marginBottom: '2rem' }}>My Profile</h1>
       
       {user && (
-        <div className="glass-panel" style={{ padding: '2rem', marginBottom: '3rem' }}>
-          <h2>{user.first_name} {user.last_name}</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>@{user.username}</p>
-          <p style={{ marginTop: '0.5rem' }}>{user.email}</p>
+        <div className="glass-panel" style={{ padding: '2rem', marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h2>{user.first_name} {user.last_name}</h2>
+            <p style={{ color: 'var(--text-secondary)' }}>@{user.username}</p>
+            <p style={{ marginTop: '0.5rem' }}>{user.email}</p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontWeight: 500 }}>
+              <input type="checkbox" checked={pushEnabled} onChange={(e) => {
+                setPushEnabled(e.target.checked);
+                if (e.target.checked) alert('Push notifications enabled!');
+              }} style={{ width: '1.2rem', height: '1.2rem' }} />
+              Enable Push Notifications
+            </label>
+          </div>
         </div>
       )}
 

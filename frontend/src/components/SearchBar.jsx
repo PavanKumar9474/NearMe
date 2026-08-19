@@ -9,6 +9,7 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
   const [minRating, setMinRating] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [radius, setRadius] = useState('');
+  const [openNow, setOpenNow] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
@@ -123,6 +124,11 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
               <option value="25" style={{ color: 'black' }}>Within 25 km</option>
             </select>
           )}
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+            <input type="checkbox" checked={openNow} onChange={(e) => setOpenNow(e.target.checked)} style={{ width: '1.2rem', height: '1.2rem' }} />
+            Open Now
+          </label>
         </div>
       )}
     </form>
