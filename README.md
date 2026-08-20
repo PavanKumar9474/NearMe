@@ -457,7 +457,8 @@ Future versions can provide personalized recommendations, real-time information,
 - PostgreSQL
 - MongoDB
 - Docker
-- Git & GitHub
+- Git
+- Github
 
 ---
 
