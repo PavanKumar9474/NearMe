@@ -186,7 +186,7 @@ The project can be built using modern web technologies such as:
 - Git
 - GitHub
 - Postman
-
+- Docker
 > Update this section to match the technologies actually used in your NearMe project.
 
 ---
@@ -457,7 +457,8 @@ Future versions can provide personalized recommendations, real-time information,
 - PostgreSQL
 - MongoDB
 - Docker
-- Git & GitHub
+- Git
+- Github
 
 ---
 
