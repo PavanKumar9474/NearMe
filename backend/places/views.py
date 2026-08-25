@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from .models import Category, Place, PlaceSuggestion, Review
 from .serializers import CategorySerializer, PlaceSerializer, PlaceSuggestionSerializer, ReviewSerializer
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -86,6 +87,15 @@ class PlaceViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def recommendations(self, request):
+        # A smart algorithm to recommend top-rated places
+        # In a real app, this would use AI or look at user preferences
+        # Here we just fetch the top 3 highest rated places
+        queryset = Place.objects.filter(rating__isnull=False).order_by('-rating')[:3]
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
