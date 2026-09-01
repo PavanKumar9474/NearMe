@@ -11,6 +11,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError('');
     axios.post('http://127.0.0.1:8000/api/token/', formData)
       .then(res => {
         localStorage.setItem('access_token', res.data.access);

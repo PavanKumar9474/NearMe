@@ -1,8 +1,18 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Category, Place, PlaceSuggestion, Review
 from .serializers import CategorySerializer, PlaceSerializer, PlaceSuggestionSerializer, ReviewSerializer
+import math
+
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371  # Earth radius in km
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -49,15 +59,6 @@ class PlaceViewSet(viewsets.ModelViewSet):
             try:
                 user_lat = float(user_lat)
                 user_lon = float(user_lon)
-                import math
-
-                def haversine(lat1, lon1, lat2, lon2):
-                    R = 6371  # Earth radius in km
-                    dlat = math.radians(lat2 - lat1)
-                    dlon = math.radians(lon2 - lon1)
-                    a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
-                    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-                    return R * c
 
                 places = []
                 for place in queryset:
@@ -112,6 +113,7 @@ class PlaceSuggestionViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Review.objects.all()

@@ -20,7 +20,9 @@ export default function AddPlacePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/suggestions/', formData)
+    const token = localStorage.getItem('access_token');
+    const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+    axios.post('http://127.0.0.1:8000/api/suggestions/', formData, config)
       .then(() => {
         alert("Suggestion submitted successfully!");
         navigate('/');

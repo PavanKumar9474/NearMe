@@ -17,7 +17,7 @@ function MapBounds({ places, userLocation }) {
 
   useEffect(() => {
     if (places.length > 0) {
-      const bounds = L.latLngBounds(places.map(p => [p.latitude, p.longitude]));
+      const bounds = L.latLngBounds(places.map(p => [parseFloat(p.latitude), parseFloat(p.longitude)]));
       if (userLocation) {
         bounds.extend(userLocation);
       }
@@ -45,7 +45,7 @@ export default function MapComponent({ places, userLocation }) {
   return (
     <div style={{ height: '500px', width: '100%', borderRadius: '1rem', overflow: 'hidden' }}>
       <MapContainer 
-        center={places.length > 0 ? [places[0].latitude, places[0].longitude] : defaultCenter} 
+        center={places.length > 0 ? [parseFloat(places[0].latitude), parseFloat(places[0].longitude)] : defaultCenter} 
         zoom={13} 
         style={{ height: '100%', width: '100%' }}
       >
@@ -59,7 +59,7 @@ export default function MapComponent({ places, userLocation }) {
           </Marker>
         )}
         {places.map(place => (
-          <Marker key={place.id} position={[place.latitude, place.longitude]}>
+          <Marker key={place.id} position={[parseFloat(place.latitude), parseFloat(place.longitude)]}>
             <Popup>
               <div style={{ color: '#000', minWidth: '150px' }}>
                 <h4 style={{ margin: '0 0 0.5rem 0' }}>{place.name}</h4>
