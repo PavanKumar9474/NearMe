@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 export default function LoginPage() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     axios.post('http://127.0.0.1:8000/api/token/', formData)
       .then(res => {
         localStorage.setItem('access_token', res.data.access);
@@ -22,6 +24,7 @@ export default function LoginPage() {
       .catch(err => {
         console.error("Login error:", err);
         setError('Invalid username or password');
+        setLoading(false);
       });
   };
 
@@ -38,7 +41,9 @@ export default function LoginPage() {
           <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Password</label>
           <input type="password" name="password" required value={formData.password} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} />
         </div>
-        <button type="submit" className="btn-primary" style={{ marginTop: '1rem', padding: '1.25rem', fontSize: '1.1rem' }}>Login</button>
+        <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '1rem', padding: '1.25rem', fontSize: '1.1rem', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
         <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '1.5rem', fontSize: '0.9rem' }}>
           Don't have an account? <Link to="/register" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 600 }}>Sign up Here</Link>
         </p>
