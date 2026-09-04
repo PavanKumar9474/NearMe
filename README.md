@@ -31,7 +31,6 @@ Finding useful places or services nearby can sometimes be difficult when users d
 For example, a user may need to quickly find:
 
 - 🏥 Hospitals
-- 💊 Pharmacies
 - 🍔 Restaurants
 - ☕ Cafes
 - 🏦 Banks
