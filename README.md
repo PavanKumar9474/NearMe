@@ -23,11 +23,9 @@ Instead of manually searching for nearby services, users can use NearMe to disco
 
 
 ---
-
 # 🎯 Problem Statement
 
 Finding useful places or services nearby can sometimes be difficult when users don't know the exact location or available options.
-
 For example, a user may need to quickly find:
 
 - 🏥 Hospitals
