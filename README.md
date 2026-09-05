@@ -54,9 +54,7 @@ Find places and services based on the user's current location.
 ## 🔎 Search
 
 Search for a specific type of place or service.
-
 Examples:
-
 ```text
 Hospital
 Restaurant
