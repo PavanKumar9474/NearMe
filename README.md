@@ -91,7 +91,7 @@ The application can be accessed across different screen sizes:
 
 ## ⭐ Easy Discovery
 
-Users can quickly discover useful services without manually searching through multiple platforms.
+Users can quickly discover useful services without manually searching through multiple platforms .
 
 ---
 
