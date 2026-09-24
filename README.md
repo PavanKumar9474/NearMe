@@ -23,15 +23,13 @@ Instead of manually searching for nearby services, users can use NearMe to disco
 
 
 ---
-
 # 🎯 Problem Statement
 
 Finding useful places or services nearby can sometimes be difficult when users don't know the exact location or available options.
-
-For example, a user may need to quickly find:
+For example,a user may need to quickly find:
 
 - 🏥 Hospitals
-- 💊 Pharmacies
+- 💊 Pharmacy 
 - 🍔 Restaurants
 - ☕ Cafes
 - 🏦 Banks
@@ -56,9 +54,7 @@ Find places and services based on the user's current location.
 ## 🔎 Search
 
 Search for a specific type of place or service.
-
 Examples:
-
 ```text
 Hospital
 Restaurant
@@ -95,7 +91,7 @@ The application can be accessed across different screen sizes:
 
 ## ⭐ Easy Discovery
 
-Users can quickly discover useful services without manually searching through multiple platforms.
+Users can quickly discover useful services without manually searching through multiple platforms .
 
 ---
 
