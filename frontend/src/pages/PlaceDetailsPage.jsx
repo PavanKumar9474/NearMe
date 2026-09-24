@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { MapPin, Globe, Phone, Clock, Star, ArrowLeft, Heart, AlertTriangle, Navigation } from 'lucide-react';
@@ -18,11 +18,11 @@ export default function PlaceDetailsPage() {
 
   const token = localStorage.getItem('access_token');
 
-  const fetchReviews = () => {
+  const fetchReviews = useCallback(() => {
     axios.get(`http://127.0.0.1:8000/api/reviews/?place=${id}`)
       .then(res => setReviews(res.data))
       .catch(err => console.error("Error fetching reviews:", err));
-  };
+  }, [id]);
 
   useEffect(() => {
     const fetchPlace = axios.get(`http://127.0.0.1:8000/api/places/${id}/`);
@@ -42,7 +42,7 @@ export default function PlaceDetailsPage() {
         console.error("Error fetching data:", err);
         setLoading(false);
       });
-  }, [id, token]);
+  }, [id, token, fetchReviews]);
 
   const toggleFavorite = () => {
     if (!token) return alert('Please login to favorite places.');
