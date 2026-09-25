@@ -11,8 +11,12 @@ export default function HomePage() {
   const [userLocation, setUserLocation] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [recommendedPlaces, setRecommendedPlaces] = useState(null);
+  const [aiMessage, setAiMessage] = useState('');
+  const [aiPreferences, setAiPreferences] = useState('');
+  const [showAiInput, setShowAiInput] = useState(false);
 
   const fetchPlaces = useCallback((searchParams = {}) => {
+    // ... no changes to fetchPlaces ... (Actually I have to include fetchPlaces here)
     setLoading(true);
     let url = 'http://127.0.0.1:8000/api/places/';
     const params = new URLSearchParams();
@@ -46,7 +50,6 @@ export default function HomePage() {
   useEffect(() => {
     fetchPlaces();
     
-    // Request user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
@@ -57,13 +60,24 @@ export default function HomePage() {
   }, [fetchPlaces]);
 
   const handleAiRecommend = () => {
+    if (!showAiInput) {
+      setShowAiInput(true);
+      return;
+    }
+    
     setAiLoading(true);
-    setTimeout(() => {
-      // Mock AI recommendation by picking random top places
-      const topPlaces = [...places].sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 3);
-      setRecommendedPlaces(topPlaces);
-      setAiLoading(false);
-    }, 1500);
+    setAiMessage('');
+    axios.get(`http://127.0.0.1:8000/api/places/recommendations/?preferences=${encodeURIComponent(aiPreferences)}`)
+      .then(res => {
+        setRecommendedPlaces(res.data.data);
+        setAiMessage(res.data.message);
+        setAiLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching AI recommendations:", err);
+        setAiMessage("Failed to get recommendations. Please try again.");
+        setAiLoading(false);
+      });
   };
 
   return (
@@ -84,20 +98,35 @@ export default function HomePage() {
         <MapComponent places={places} userLocation={userLocation} />
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <h2 style={{ margin: 0 }}>Popular Places</h2>
-        <button onClick={handleAiRecommend} disabled={aiLoading || places.length === 0} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', background: 'var(--accent-gradient)' }}>
-          <Sparkles size={18} />
-          {aiLoading ? 'Analyzing preferences...' : 'Personalized AI Recommendations'}
-        </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <h2 style={{ margin: 0 }}>Popular Places</h2>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', width: showAiInput ? '100%' : 'auto', transition: 'all 0.3s ease' }}>
+            {showAiInput && (
+              <input 
+                type="text" 
+                placeholder="What are you looking for? (e.g. A cozy cafe to work from)" 
+                value={aiPreferences}
+                onChange={(e) => setAiPreferences(e.target.value)}
+                style={{ flex: 1, padding: '0.75rem 1rem', borderRadius: '0.5rem', border: '1px solid var(--accent-primary)', background: 'rgba(0,0,0,0.2)', color: 'white', minWidth: '250px' }}
+                onKeyDown={(e) => e.key === 'Enter' && handleAiRecommend()}
+              />
+            )}
+            <button onClick={handleAiRecommend} disabled={aiLoading || places.length === 0} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', background: 'var(--accent-gradient)', whiteSpace: 'nowrap' }}>
+              <Sparkles size={18} />
+              {aiLoading ? 'Analyzing...' : showAiInput ? 'Get Recommendations' : 'AI Recommendations'}
+            </button>
+          </div>
+        </div>
       </div>
       
       {recommendedPlaces && (
         <div className="glass-panel animate-fade-in" style={{ padding: '2rem', marginBottom: '3rem', border: '1px solid var(--accent-primary)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', color: 'var(--accent-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: 'var(--accent-primary)' }}>
             <Sparkles size={24} />
             <h3 style={{ margin: 0 }}>AI Top Picks For You</h3>
           </div>
+          {aiMessage && <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>{aiMessage}</p>}
           <div className="grid-cards">
             {recommendedPlaces.map(place => (
               <PlaceCard key={place.id} place={place} />

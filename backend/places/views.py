@@ -93,12 +93,52 @@ class PlaceViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def recommendations(self, request):
-        # A smart algorithm to recommend top-rated places
-        # In a real app, this would use AI or look at user preferences
-        # Here we just fetch the top 3 highest rated places
-        queryset = Place.objects.filter(rating__isnull=False).order_by('-rating')[:3]
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        import os
+        import google.generativeai as genai
+        import json
+        from django.db.models import Case, When
+        
+        api_key = os.getenv("GEMINI_API_KEY")
+        user_preferences = request.query_params.get("preferences", "")
+        
+        # Fallback if no API key or no preferences
+        if not api_key:
+            queryset = Place.objects.filter(rating__isnull=False).order_by('-rating')[:3]
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({"ai_powered": False, "data": serializer.data, "message": "Showing top rated places (No AI API Key provided)."})
+            
+        genai.configure(api_key=api_key)
+        
+        places = Place.objects.filter(is_active=True)
+        places_data = [{"id": p.id, "name": p.name, "category": p.category.name, "description": p.description, "rating": float(p.rating) if p.rating else 0.0} for p in places]
+        
+        prompt = f"""
+        Given the following list of places in JSON format:
+        {json.dumps(places_data)}
+        
+        And the user's preferences: "{user_preferences or 'I want to explore nice places around.'}"
+        
+        Please select the top 3 best places for this user. 
+        Return ONLY a JSON array of the recommended place IDs (e.g., [1, 5, 2]). Do not include any other text, reasoning, or markdown formatting.
+        """
+        
+        try:
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+            
+            recommended_ids_text = response.text.strip().replace("```json", "").replace("```", "").strip()
+            recommended_ids = json.loads(recommended_ids_text)
+            
+            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(recommended_ids)])
+            queryset = Place.objects.filter(id__in=recommended_ids).order_by(preserved)
+            serializer = self.get_serializer(queryset, many=True)
+            
+            return Response({"ai_powered": True, "data": serializer.data, "message": "AI picked these just for you!"})
+        except Exception as e:
+            # Fallback
+            queryset = Place.objects.filter(rating__isnull=False).order_by('-rating')[:3]
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({"ai_powered": False, "data": serializer.data, "message": f"AI error, showing top rated places. Error: {str(e)}"})
 
 class PlaceSuggestionViewSet(viewsets.ModelViewSet):
     queryset = PlaceSuggestion.objects.all()
