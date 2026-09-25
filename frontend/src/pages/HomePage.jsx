@@ -36,7 +36,10 @@ export default function HomePage() {
       url += `?${params.toString()}`;
     }
 
-    axios.get(url)
+    const token = localStorage.getItem('access_token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    axios.get(url, { headers })
       .then(res => {
         setPlaces(res.data);
         setLoading(false);
@@ -65,9 +68,12 @@ export default function HomePage() {
       return;
     }
     
+    const token = localStorage.getItem('access_token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
     setAiLoading(true);
     setAiMessage('');
-    axios.get(`http://127.0.0.1:8000/api/places/recommendations/?preferences=${encodeURIComponent(aiPreferences)}`)
+    axios.get(`http://127.0.0.1:8000/api/places/recommendations/?preferences=${encodeURIComponent(aiPreferences)}`, { headers })
       .then(res => {
         setRecommendedPlaces(res.data.data);
         setAiMessage(res.data.message);

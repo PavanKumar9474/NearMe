@@ -54,6 +54,29 @@ class PlaceViewSet(viewsets.ModelViewSet):
         user_lon = request.query_params.get('user_lon')
         radius = request.query_params.get('radius')
         sort_by = request.query_params.get('sort_by')
+        
+        # Save Search History for authenticated users
+        search_query = request.query_params.get('search', '')
+        category_slug = request.query_params.get('category', '')
+        if request.user.is_authenticated and (search_query or category_slug):
+            from users.models import SearchHistory
+            
+            lat_val = None
+            lon_val = None
+            if user_lat and user_lon:
+                try:
+                    lat_val = float(user_lat)
+                    lon_val = float(user_lon)
+                except ValueError:
+                    pass
+                    
+            SearchHistory.objects.create(
+                user=request.user,
+                query=search_query,
+                category=category_slug,
+                latitude=lat_val,
+                longitude=lon_val
+            )
 
         if user_lat and user_lon:
             try:
@@ -101,11 +124,31 @@ class PlaceViewSet(viewsets.ModelViewSet):
         api_key = os.getenv("GEMINI_API_KEY")
         user_preferences = request.query_params.get("preferences", "")
         
-        # Fallback if no API key or no preferences
+        # Gather personalized context if user is authenticated
+        personal_context = ""
+        if request.user.is_authenticated:
+            from users.models import Favorite, SearchHistory
+            favorites = Favorite.objects.filter(user=request.user).select_related('place')
+            recent_searches = SearchHistory.objects.filter(user=request.user).order_by('-created_at')[:5]
+            
+            fav_names = [f.place.name for f in favorites]
+            search_queries = [s.query for s in recent_searches if s.query]
+            
+            if fav_names or search_queries:
+                personal_context = "Here is some context about the user's past behavior on the app:\n"
+                if fav_names:
+                    personal_context += f"- They have favorited these places: {', '.join(fav_names)}\n"
+                if search_queries:
+                    personal_context += f"- They recently searched for: {', '.join(search_queries)}\n"
+        
+        # Fallback if no API key
         if not api_key:
             queryset = Place.objects.filter(rating__isnull=False).order_by('-rating')[:3]
             serializer = self.get_serializer(queryset, many=True)
-            return Response({"ai_powered": False, "data": serializer.data, "message": "Showing top rated places (No AI API Key provided)."})
+            msg = "Showing top rated places (No AI API Key provided)."
+            if personal_context:
+                msg += " Note: We found your personal preferences, but need an API key to use them."
+            return Response({"ai_powered": False, "data": serializer.data, "message": msg})
             
         genai.configure(api_key=api_key)
         
@@ -116,9 +159,11 @@ class PlaceViewSet(viewsets.ModelViewSet):
         Given the following list of places in JSON format:
         {json.dumps(places_data)}
         
-        And the user's preferences: "{user_preferences or 'I want to explore nice places around.'}"
+        {personal_context}
         
-        Please select the top 3 best places for this user. 
+        The user has also explicitly requested the following preferences for right now: "{user_preferences or 'I want to explore nice places around.'}"
+        
+        Please select the top 3 best places for this user, prioritizing their explicit preferences, but also considering their past behavior (if any).
         Return ONLY a JSON array of the recommended place IDs (e.g., [1, 5, 2]). Do not include any other text, reasoning, or markdown formatting.
         """
         
@@ -133,7 +178,11 @@ class PlaceViewSet(viewsets.ModelViewSet):
             queryset = Place.objects.filter(id__in=recommended_ids).order_by(preserved)
             serializer = self.get_serializer(queryset, many=True)
             
-            return Response({"ai_powered": True, "data": serializer.data, "message": "AI picked these just for you!"})
+            msg = "AI picked these just for you!"
+            if personal_context and not user_preferences:
+                msg = "AI picked these based on your favorites and recent searches!"
+            
+            return Response({"ai_powered": True, "data": serializer.data, "message": msg})
         except Exception as e:
             # Fallback
             queryset = Place.objects.filter(rating__isnull=False).order_by('-rating')[:3]
