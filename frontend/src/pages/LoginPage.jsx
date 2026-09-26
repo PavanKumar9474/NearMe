@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { Mail, Lock, ArrowRight, User } from 'lucide-react';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -29,25 +30,72 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container animate-fade-in" style={{ maxWidth: '450px', marginTop: '6rem' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Welcome Back</h1>
-      <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '3rem 2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {error && <div style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '1rem', borderRadius: '0.75rem', textAlign: 'center', fontWeight: 500 }}>{error}</div>}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Username</label>
-          <input type="text" name="username" required value={formData.username} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} />
+    <div className="container animate-fade-in" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <div className="glass-panel" style={{ width: '100%', maxWidth: '480px', padding: '3.5rem', position: 'relative', overflow: 'hidden' }}>
+        
+        {/* Decorative background blur */}
+        <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '150px', height: '150px', background: 'var(--accent-primary)', borderRadius: '50%', filter: 'blur(80px)', opacity: 0.3, zIndex: -1 }}></div>
+        <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '150px', height: '150px', background: '#ec4899', borderRadius: '50%', filter: 'blur(80px)', opacity: 0.3, zIndex: -1 }}></div>
+
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Welcome Back</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>Sign in to continue discovering places near you.</p>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Password</label>
-          <input type="password" name="password" required value={formData.password} onChange={handleChange} style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.2)', color: 'white', fontSize: '1rem' }} />
-        </div>
-        <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '1rem', padding: '1.25rem', fontSize: '1.1rem', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '1.5rem', fontSize: '0.9rem' }}>
-          Don't have an account? <Link to="/register" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 600 }}>Sign up Here</Link>
-        </p>
-      </form>
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {error && (
+            <div style={{ color: '#f87171', background: 'rgba(239, 68, 68, 0.1)', padding: '1rem', borderRadius: '0.75rem', textAlign: 'center', fontWeight: 500, fontSize: '0.9rem', border: '1px solid rgba(239,68,68,0.2)' }}>
+              {error}
+            </div>
+          )}
+          
+          <div style={{ position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '50%', left: '1rem', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }}>
+              <User size={20} />
+            </div>
+            <input 
+              type="text" 
+              name="username" 
+              placeholder="Username"
+              required 
+              value={formData.username} 
+              onChange={handleChange} 
+              style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '1rem', transition: 'var(--transition-smooth)' }} 
+              onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
+              onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+            />
+          </div>
+
+          <div style={{ position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '50%', left: '1rem', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }}>
+              <Lock size={20} />
+            </div>
+            <input 
+              type="password" 
+              name="password" 
+              placeholder="Password"
+              required 
+              value={formData.password} 
+              onChange={handleChange} 
+              style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '1rem', transition: 'var(--transition-smooth)' }} 
+              onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
+              onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '1rem', padding: '1.25rem', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
+            {loading ? 'Logging in...' : 'Sign In'}
+            {!loading && <ArrowRight size={20} />}
+          </button>
+
+          <div style={{ textAlign: 'center', marginTop: '1.5rem', display: 'flex', justifyContent: 'center', gap: '0.5rem', fontSize: '0.95rem' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Don't have an account?</span>
+            <Link to="/register" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 600, transition: 'var(--transition-smooth)' }} onMouseOver={(e) => e.target.style.color = 'var(--accent-hover)'} onMouseOut={(e) => e.target.style.color = 'var(--accent-primary)'}>
+              Create one now
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
