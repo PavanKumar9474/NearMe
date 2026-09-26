@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, User } from 'lucide-react';
+import { Lock, ArrowRight, User } from 'lucide-react';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ username: '', password: '' });

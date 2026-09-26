@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapPin, PlusCircle, User, LogOut, LogIn, Compass } from 'lucide-react';
+import { PlusCircle, User, LogOut, LogIn, Compass } from 'lucide-react';
 
 export default function Navbar() {
   const navigate = useNavigate();
