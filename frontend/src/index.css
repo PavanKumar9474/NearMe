@@ -187,3 +187,11 @@ form > button {
   box-shadow: var(--shadow-panel);
   border: 1px solid var(--border-glass);
 }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
