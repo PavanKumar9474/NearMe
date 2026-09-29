@@ -16,7 +16,7 @@ export default function PlaceDetailsPage() {
   const [reviewRating, setReviewRating] = useState(5);
   const [submittingReview, setSubmittingReview] = useState(false);
 
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
 
   const fetchReviews = useCallback(() => {
     axios.get(`http://127.0.0.1:8000/api/reviews/?place=${id}`)

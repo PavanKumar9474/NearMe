@@ -19,10 +19,13 @@ export default function LoginPage() {
     setLoading(true);
     axios.post('http://127.0.0.1:8000/api/token/', formData)
       .then(res => {
-        // We'll store it in localStorage anyway for now, but in a real app
-        // you might use sessionStorage if rememberMe is false.
-        localStorage.setItem('access_token', res.data.access);
-        localStorage.setItem('refresh_token', res.data.refresh);
+        if (rememberMe) {
+          localStorage.setItem('access_token', res.data.access);
+          localStorage.setItem('refresh_token', res.data.refresh);
+        } else {
+          sessionStorage.setItem('access_token', res.data.access);
+          sessionStorage.setItem('refresh_token', res.data.refresh);
+        }
         navigate('/');
         window.location.reload(); 
       })

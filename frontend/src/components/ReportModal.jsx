@@ -10,7 +10,7 @@ export default function ReportModal({ placeId, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
     
     if (!token) {
       setError('You must be logged in to report a place.');

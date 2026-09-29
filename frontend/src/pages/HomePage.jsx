@@ -36,7 +36,7 @@ export default function HomePage() {
       url += `?${params.toString()}`;
     }
 
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     axios.get(url, { headers })
@@ -68,7 +68,7 @@ export default function HomePage() {
       return;
     }
     
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     
     setAiLoading(true);

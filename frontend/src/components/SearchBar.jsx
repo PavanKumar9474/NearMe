@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 
 export default function SearchBar({ onSearch, showDistanceSort }) {
   const [categories, setCategories] = useState([]);
@@ -14,7 +14,7 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/categories/')
@@ -66,6 +66,15 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
             onBlur={() => setTimeout(() => setShowHistory(false), 200)}
             style={{ width: '100%', padding: '0.75rem', background: 'transparent', border: 'none', color: 'white', outline: 'none' }}
           />
+          {query && (
+            <button 
+              type="button"
+              onClick={() => { setQuery(''); onSearch({ query: '', category, minRating, sortBy, radius }); }}
+              style={{ background: 'transparent', border: 'none', display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '0.25rem' }}
+            >
+              <X size={18} color="var(--text-secondary)" />
+            </button>
+          )}
           {showHistory && history.length > 0 && (
             <div style={{ position: 'absolute', top: '110%', left: 0, right: 0, background: 'var(--bg-secondary)', border: '1px solid var(--border-glass)', borderRadius: '0.5rem', zIndex: 10, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
               {history.map((h, i) => (

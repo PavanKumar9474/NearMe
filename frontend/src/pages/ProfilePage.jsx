@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
     if (!token) {
       navigate('/login');
       return;

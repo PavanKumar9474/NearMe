@@ -4,11 +4,13 @@ import { PlusCircle, User, LogOut, LogIn, Compass } from 'lucide-react';
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
     navigate('/');
     window.location.reload();
   };
