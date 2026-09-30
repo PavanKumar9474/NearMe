@@ -87,9 +87,8 @@ export default function RegisterPage() {
                 placeholder="First Name"
                 value={formData.first_name} 
                 onChange={handleChange} 
-                style={{ width: '100%', padding: '0.875rem 1rem 0.875rem 2.75rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '0.95rem', transition: 'var(--transition-smooth)' }} 
-                onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
-                onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+                className="input-glass"
+                style={{ paddingLeft: '2.75rem' }} 
               />
             </div>
             <div style={{ position: 'relative' }}>
@@ -102,9 +101,8 @@ export default function RegisterPage() {
                 placeholder="Last Name"
                 value={formData.last_name} 
                 onChange={handleChange} 
-                style={{ width: '100%', padding: '0.875rem 1rem 0.875rem 2.75rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '0.95rem', transition: 'var(--transition-smooth)' }} 
-                onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
-                onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+                className="input-glass"
+                style={{ paddingLeft: '2.75rem' }} 
               />
             </div>
           </div>
@@ -120,9 +118,8 @@ export default function RegisterPage() {
               required 
               value={formData.email} 
               onChange={handleChange} 
-              style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '1rem', transition: 'var(--transition-smooth)' }} 
-              onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
-              onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+              className="input-glass"
+              style={{ paddingLeft: '3rem' }} 
             />
           </div>
 
@@ -137,9 +134,8 @@ export default function RegisterPage() {
               required 
               value={formData.username} 
               onChange={handleChange} 
-              style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '1rem', transition: 'var(--transition-smooth)' }} 
-              onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
-              onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+              className="input-glass"
+              style={{ paddingLeft: '3rem' }} 
             />
           </div>
 
@@ -154,9 +150,8 @@ export default function RegisterPage() {
               required 
               value={formData.password} 
               onChange={handleChange} 
-              style={{ width: '100%', padding: '1rem 3.5rem 1rem 3rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '1rem', transition: 'var(--transition-smooth)' }} 
-              onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
-              onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+              className="input-glass"
+              style={{ paddingLeft: '3rem', paddingRight: '3.5rem' }} 
             />
             <div 
               onClick={() => setShowPassword(!showPassword)}

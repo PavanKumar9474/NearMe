@@ -67,9 +67,8 @@ export default function LoginPage() {
               required 
               value={formData.username} 
               onChange={handleChange} 
-              style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '1rem', transition: 'var(--transition-smooth)' }} 
-              onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
-              onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+              className="input-glass"
+              style={{ paddingLeft: '3rem' }} 
             />
           </div>
 
@@ -84,9 +83,8 @@ export default function LoginPage() {
               required 
               value={formData.password} 
               onChange={handleChange} 
-              style={{ width: '100%', padding: '1rem 3.5rem 1rem 3rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)', color: 'white', fontSize: '1rem', transition: 'var(--transition-smooth)' }} 
-              onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.borderColor = 'var(--accent-primary)'; }}
-              onBlur={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.03)'; e.target.style.borderColor = 'var(--border-glass)'; }}
+              className="input-glass"
+              style={{ paddingLeft: '3rem', paddingRight: '3.5rem' }} 
             />
             <div 
               onClick={() => setShowPassword(!showPassword)}

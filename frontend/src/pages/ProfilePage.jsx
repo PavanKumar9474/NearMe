@@ -53,7 +53,7 @@ export default function ProfilePage() {
             <p style={{ color: 'var(--text-secondary)' }}>@{user.username}</p>
             <p style={{ marginTop: '0.5rem' }}>{user.email}</p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)' }}>
+          <div className="glass-panel" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontWeight: 500 }}>
               <input type="checkbox" checked={pushEnabled} onChange={(e) => {
                 setPushEnabled(e.target.checked);

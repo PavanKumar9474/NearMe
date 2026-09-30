@@ -45,10 +45,6 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
 
   const inputStyle = {
     padding: '0.75rem 1rem', 
-    borderRadius: '0.5rem', 
-    border: '1px solid var(--border-glass)', 
-    background: 'rgba(0,0,0,0.2)', 
-    color: 'white', 
     minWidth: '150px'
   };
 
@@ -107,26 +103,26 @@ export default function SearchBar({ onSearch, showDistanceSort }) {
 
       {showAdvanced && (
         <div className="animate-fade-in" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', paddingTop: '1rem', borderTop: '1px solid var(--border-glass)' }}>
-          <select value={category} onChange={(e) => setCategory(e.target.value)} style={inputStyle}>
+          <select value={category} onChange={(e) => setCategory(e.target.value)} className="input-glass" style={inputStyle}>
             <option value="">All Categories</option>
             {categories.map(c => <option key={c.id} value={c.slug} style={{ color: 'black' }}>{c.name}</option>)}
           </select>
 
-          <select value={minRating} onChange={(e) => setMinRating(e.target.value)} style={inputStyle}>
+          <select value={minRating} onChange={(e) => setMinRating(e.target.value)} className="input-glass" style={inputStyle}>
             <option value="">Any Rating</option>
             <option value="3" style={{ color: 'black' }}>3+ Stars</option>
             <option value="4" style={{ color: 'black' }}>4+ Stars</option>
             <option value="4.5" style={{ color: 'black' }}>4.5+ Stars</option>
           </select>
 
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={inputStyle}>
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="input-glass" style={inputStyle}>
             <option value="">Sort By (Default)</option>
             <option value="rating" style={{ color: 'black' }}>Highest Rated</option>
             {showDistanceSort && <option value="distance" style={{ color: 'black' }}>Nearest</option>}
           </select>
 
           {showDistanceSort && (
-            <select value={radius} onChange={(e) => setRadius(e.target.value)} style={inputStyle}>
+            <select value={radius} onChange={(e) => setRadius(e.target.value)} className="input-glass" style={inputStyle}>
               <option value="">Any Distance</option>
               <option value="5" style={{ color: 'black' }}>Within 5 km</option>
               <option value="10" style={{ color: 'black' }}>Within 10 km</option>

@@ -222,7 +222,7 @@ export default function PlaceDetailsPage() {
                     
                     <div>
                       <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Rating</label>
-                      <select value={reviewRating} onChange={(e) => setReviewRating(Number(e.target.value))} style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.3)', color: 'white', fontSize: '1rem', appearance: 'none' }}>
+                      <select value={reviewRating} onChange={(e) => setReviewRating(Number(e.target.value))} className="input-glass" style={{ appearance: 'none' }}>
                         <option value="5">5 - Excellent (⭐⭐⭐⭐⭐)</option>
                         <option value="4">4 - Good (⭐⭐⭐⭐)</option>
                         <option value="3">3 - Average (⭐⭐⭐)</option>
@@ -238,7 +238,8 @@ export default function PlaceDetailsPage() {
                         value={reviewText} 
                         onChange={(e) => setReviewText(e.target.value)} 
                         rows="4" 
-                        style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.3)', color: 'white', resize: 'vertical', fontSize: '1rem' }}
+                        className="input-glass"
+                        style={{ resize: 'vertical' }}
                         placeholder="What did you like or dislike?"
                       />
                     </div>
