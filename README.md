@@ -3,7 +3,6 @@
 # 📍 NearMe
 
 ### Discover Places, Services & Businesses Near You
-
 <p>
   A location-based web application that helps users discover
   <strong>nearby places, businesses, and essential services</strong>
