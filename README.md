@@ -54,7 +54,6 @@ For example, a user may need to find:
 - 🏨 A hotel
 - 🔧 A service center
 - 🎓 A school or college
-- 🚗 A parking location
 
 Users normally need to search, compare locations, check distances, and then open a separate map application for navigation.
 
